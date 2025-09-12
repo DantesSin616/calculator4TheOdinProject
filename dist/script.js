@@ -1,28 +1,18 @@
 "use strict";
-function add(num1, num2) { return num1 + num2; }
-function subt(num1, num2) { return num1 - num2; }
-function mult(num1, num2) { return num1 * num2; }
-function divs(num1, num2) { return num1 / num2; }
-// ! adding addEventListener, but right now i dunno how they work
-function operate(num1, operator, num2) {
-    if (operator === "+") {
-        return add(num1, num2);
-    }
-    else if (operator === "-") {
-        return subt(num1, num2);
-    }
-    else if (operator === "*") {
-        return mult(num1, num2);
-    }
-    else if (operator === "/") {
-        return divs(num1, num2);
-    }
+const btnNums = document.querySelectorAll('[data-number]');
+const btnOprt = document.querySelectorAll('[data-operator');
+const btnEqual = document.querySelectorAll('[equalsBtn]');
+const btnClear = document.querySelectorAll('[clearBtn]');
+const btnDelete = document.querySelectorAll('[deleteBtn]');
+const btnPoint = document.querySelectorAll('[pointBtn]');
+const screeLastOperation = document.querySelectorAll('[lastOprtDisplay]');
+const screeCurrentOperation = document.querySelectorAll('[currentOprtDisplay]');
+function add(a, b) { return a + b; }
+function subt(a, b) { return a - b; }
+function mult(a, b) { return a * b; }
+function divs(a, b) { return a / b; }
+// Logic to operate
+function operate(a, operator, b) {
     return 0;
-}
-// function bttnClick(){
-// let x = document.getElementById()
-// }
-function alertFunction() {
-    alert("Made it.");
 }
 //# sourceMappingURL=script.js.map

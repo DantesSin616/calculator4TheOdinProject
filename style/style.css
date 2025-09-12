@@ -1,70 +1,18 @@
-/* Calculator container styling */
-.calculator-container {
-    background: #fafafa;
-    padding: 32px 24px 24px 24px;
-    border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.buttons-grid button#clearBtn {
+    grid-column: 1 / span 2;
+    grid-row: 1;
+    background: #fbbf24;
+    color: #fff;
+    font-weight: 600;
+}
+.buttons-grid button#clearBtn:hover,
+.buttons-grid button#clearBtn:focus {
+    background: #f59e42;
+    color: #fff;
 }
 
-#display {
-    width: 100%;
-    margin-bottom: 18px;
-    padding: 12px;
-    font-size: 1.5rem;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background: #f5f5f5;
-    text-align: right;
-    box-sizing: border-box;
-}
-
-.button-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 60px);
-    grid-gap: 12px;
-    width: 100%;
-}
-
-.calculator-container #display {
-    grid-column: 1 / -1;
-    width: 100%;
-    margin-bottom: 18px;
-    padding: 12px;
-    font-size: 1.5rem;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background: #f5f5f5;
-    text-align: right;
-    box-sizing: border-box;
-    margin-top: 0;
-}
-
-button.bttn {
-    width: 60px;
-    height: 48px;
-    /* ...existing button styles... */
-}
-button.bttn {
-    background-color: #fff;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    padding: 16px 24px;
-    margin: 6px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: background 0.2s, box-shadow 0.2s;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-button.bttn:hover {
-    background-color: #e0e0e0;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.10);
-}
+/* Reset and base styles */
 * {
-    background-color: #f0f0f0;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -72,9 +20,193 @@ button.bttn:hover {
 }
 
 body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+}
+
+.calculator {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(60, 72, 88, 0.18), 0 1.5px 4px rgba(60, 72, 88, 0.10);
+    padding: 2.5rem 2rem 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 370px;
+    min-width: 370px;
+    max-width: 370px;
+    box-sizing: border-box;
+}
+
+.screen {
+    background: #f3f4f6;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(60, 72, 88, 0.07);
+    margin-bottom: 1.5rem;
+    padding: 1.2rem 1rem 0.7rem 1rem;
+    width: 100%;
+    min-height: 55px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.2rem;
+    box-sizing: border-box;
+}
+
+.screen-last {
+    color: #a0aec0;
+    font-size: 1.1rem;
+    min-height: 1.2em;
+    text-align: right;
+    letter-spacing: 0.5px;
+    word-break: break-all;
+}
+.screen-current {
+    color: #22223b;
+    font-size: 2.1rem;
+    font-weight: 600;
+    text-align: right;
+    min-height: 1.5em;
+    letter-spacing: 1px;
+    word-break: break-all;
+}
+
+.buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 16px;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.buttons-grid button {
+    background: #f8fafc;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #22223b;
+    padding: 0.9rem 0;
+    box-shadow: 0 1.5px 4px rgba(60, 72, 88, 0.10);
+    cursor: pointer;
+    transition: background 0.18s, box-shadow 0.18s, color 0.18s;
+    outline: none;
+    min-width: 0;
+}
+
+.buttons-grid button:hover, .buttons-grid button:focus {
+    background: #e0e7ff;
+    color: #3b5bdb;
+    box-shadow: 0 4px 16px rgba(60, 72, 88, 0.13);
+}
+
+.buttons-grid button[data-operator] {
+    background: #e0e7ff;
+    color: #3b5bdb;
+    font-weight: 600;
+}
+
+.buttons-grid button#equalsBtn {
+    background: linear-gradient(90deg, #3b5bdb 60%, #5eead4 100%);
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 4px 16px rgba(60, 72, 88, 0.18);
+}
+
+.buttons-grid button#equalsBtn:hover, .buttons-grid button#equalsBtn:focus {
+    background: linear-gradient(90deg, #5eead4 0%, #3b5bdb 100%);
+    color: #fff;
+}
+
+.buttons-grid button#deleteBtn {
+    grid-column: 3 / span 2;
+    grid-row: 1;
+    background: #f87171;
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Button placement for perfect alignment with CLEAR and DELETE spanning two columns */
+.buttons-grid button#clearBtn { grid-column: 1 / span 2; grid-row: 1; }
+.buttons-grid button#deleteBtn { grid-column: 3 / span 2; grid-row: 1; }
+.buttons-grid button:nth-child(3) { grid-column: 1; grid-row: 2; } /* 7 */
+.buttons-grid button:nth-child(4) { grid-column: 2; grid-row: 2; } /* 8 */
+.buttons-grid button:nth-child(5) { grid-column: 3; grid-row: 2; } /* 9 */
+.buttons-grid button:nth-child(6) { grid-column: 4; grid-row: 2; } /* ÷ */
+.buttons-grid button:nth-child(7) { grid-column: 1; grid-row: 3; } /* 4 */
+.buttons-grid button:nth-child(8) { grid-column: 2; grid-row: 3; } /* 5 */
+.buttons-grid button:nth-child(9) { grid-column: 3; grid-row: 3; } /* 6 */
+.buttons-grid button:nth-child(10) { grid-column: 4; grid-row: 3; } /* × */
+.buttons-grid button:nth-child(11) { grid-column: 1; grid-row: 4; } /* 1 */
+.buttons-grid button:nth-child(12) { grid-column: 2; grid-row: 4; } /* 2 */
+.buttons-grid button:nth-child(13) { grid-column: 3; grid-row: 4; } /* 3 */
+.buttons-grid button:nth-child(14) { grid-column: 4; grid-row: 4; } /* − */
+.buttons-grid button:nth-child(15) { grid-column: 1; grid-row: 5; } /* . */
+.buttons-grid button:nth-child(16) { grid-column: 2; grid-row: 5; } /* 0 */
+.buttons-grid button:nth-child(17) { grid-column: 3; grid-row: 5; } /* = */
+.buttons-grid button:nth-child(18) { grid-column: 4; grid-row: 5; } /* + */
+
+.buttons-grid button#deleteBtn:hover, .buttons-grid button#deleteBtn:focus {
+    background: #ef4444;
+    color: #fff;
+}
+
+.buttons-grid button:first-child {
+    background: #fbbf24;
+    color: #fff;
+    font-weight: 600;
+}
+.buttons-grid button:first-child:hover,
+.buttons-grid button:first-child:focus {
+    background: #f59e42;
+    color: #fff;
+}
+
+/* Responsive design */
+
+
+.footer {
+    margin-top: 2.5rem;
+    color: #a0aec0;
+    font-size: 1rem;
+    text-align: center;
+    letter-spacing: 1px;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    gap: 0.5em;
+    flex-wrap: wrap;
+}
+
+.github-link {
+    display: inline-flex;
+    align-items: center;
+    color: #22223b;
+    text-decoration: none;
+    margin-left: 0.5em;
+    transition: color 0.2s;
+}
+.github-link:hover .github-logo {
+    color: #3b5bdb;
+}
+.github-logo {
+    width: 1.5em;
+    height: 1.5em;
+    display: inline-block;
+    vertical-align: middle;
+    transition: color 0.2s;
 }
 
