@@ -53,31 +53,42 @@ function clear(){
 function addPoint(){
     console.log('addPoint called');
     if (!screenCurrentOperation) {
-        console.log('screenCurrentOperation is null');
         return;
     }
     if (shouldResetScreen) {
-        console.log('shouldResetScreen true, calling resetScreen');
         resetScreen();
     }
     if (screenCurrentOperation.textContent === ''){
-        console.log('textContent empty, setting to 0');
         screenCurrentOperation.textContent = '0';
     }
     if (screenCurrentOperation.textContent.includes('.')) {
-        console.log('Already contains dot, returning');
         return;
     }
     screenCurrentOperation.textContent += '.';
     console.log('Dot added, textContent now:', screenCurrentOperation.textContent);
 }
 
-function setOperation(oprt:string){}
+function setOperation(oprt:string){
+
+}
 
 function deleteNum(){ 
+   if (screenCurrentOperation) 
+    screenCurrentOperation.textContent = screenCurrentOperation.textContent 
+    .toString()
+    .slice(0, -1);
 }
 
 function evaluate(){}
+
+
+function convertOperator(keyboardOperator:string) {
+  if (keyboardOperator === '/') return '÷'
+  if (keyboardOperator === '*') return '×'
+  if (keyboardOperator === '-') return '−'
+  if (keyboardOperator === '+') return '+'
+  return keyboardOperator;
+}
 
 // basic arithmetic operations
 function add(a:number, b:number) {return a + b}
@@ -86,7 +97,16 @@ function mult(a:number, b:number) {return a * b}
 function divs(a:number, b:number) {return a / b}
 
 
-function keyboardInput(){} 
+function keyboardInput(e:any){
+    if (e.key >= 0 && e.key <= 9) {return appendNumber(e.key)}
+    if (e.key === '.') {return addPoint}
+    if (e.key === '=' || e.key === 'Enter') {evaluate()}
+    if (e.key === 'Backspace') {deleteNum()}
+    if (e.key === 'Escape') {clear()}
+    if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') {
+        setOperation(convertOperator(e.key))
+    }
+} 
 
 
 // Logic to operate
