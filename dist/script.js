@@ -35,13 +35,12 @@ function clear() {
     if (screenCurrentOperation)
         screenCurrentOperation.textContent = '0';
     if (screenLastOperation)
-        screenLastOperation.textContent = '0';
+        screenLastOperation.textContent = '';
     firstOperand = '';
     secondOperand = '';
-    currentOperand = false;
+    currentOperand = null;
 }
 function addPoint() {
-    console.log('addPoint called');
     if (!screenCurrentOperation) {
         return;
     }
@@ -55,9 +54,15 @@ function addPoint() {
         return;
     }
     screenCurrentOperation.textContent += '.';
-    console.log('Dot added, textContent now:', screenCurrentOperation.textContent);
 }
 function setOperation(oprt) {
+    // Only set up the operation, do not evaluate
+    if (screenCurrentOperation)
+        firstOperand = screenCurrentOperation.textContent;
+    currentOperand = oprt;
+    if (screenLastOperation)
+        screenLastOperation.textContent = `${firstOperand} ${currentOperand}`;
+    shouldResetScreen = true;
 }
 function deleteNum() {
     if (screenCurrentOperation)
@@ -65,7 +70,23 @@ function deleteNum() {
             .toString()
             .slice(0, -1);
 }
-function evaluate() { }
+function evaluate() {
+    if (screenCurrentOperation === null || shouldResetScreen)
+        return;
+    if ((currentOperand === '/' || currentOperand === '÷') && screenCurrentOperation.textContent === '0') {
+        alert("You cannot divide by 0");
+        return;
+    }
+    secondOperand = screenCurrentOperation.textContent;
+    screenCurrentOperation.textContent = `${roundResult(operate(currentOperand, firstOperand, secondOperand))}`;
+    if (screenLastOperation)
+        screenLastOperation.textContent = `${firstOperand} ${currentOperand} ${secondOperand} =`;
+    firstOperand = screenCurrentOperation.textContent;
+    currentOperand = null;
+}
+function roundResult(number) {
+    return Math.round(number * 1000) / 1000;
+}
 function convertOperator(keyboardOperator) {
     if (keyboardOperator === '/')
         return '÷';
@@ -83,39 +104,30 @@ function subt(a, b) { return a - b; }
 function mult(a, b) { return a * b; }
 function divs(a, b) { return a / b; }
 function keyboardInput(e) {
-    if (e.key >= 0 && e.key <= 9) {
+    if (e.key >= 0 && e.key <= 9)
         return appendNumber(e.key);
-    }
-    if (e.key === '.') {
-        return addPoint;
-    }
-    if (e.key === '=' || e.key === 'Enter') {
+    if (e.key === '.')
+        return addPoint();
+    if (e.key === '=' || e.key === 'Enter')
         evaluate();
-    }
-    if (e.key === 'Backspace') {
+    if (e.key === 'Backspace')
         deleteNum();
-    }
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape')
         clear();
-    }
     if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') {
         setOperation(convertOperator(e.key));
     }
 }
 // Logic to operate
-function operate(a, b, operator) {
+function operate(operator, a, b) {
     a = Number(a);
     b = Number(b);
     switch (operator) {
-        case '+':
-            return add(a, b);
-        case '-':
-            return subt(a, b);
-        case '*':
-            return mult(a, b);
-        case '/':
-            return divs(a, b);
+        case '+': return add(a, b);
+        case '−': return subt(a, b);
+        case '×': return mult(a, b);
+        case '÷': return divs(a, b);
+        default: return 0;
     }
-    return 0;
 }
 //# sourceMappingURL=script.js.map
