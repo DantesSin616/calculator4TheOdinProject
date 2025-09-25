@@ -11,20 +11,38 @@ let firstOperand = '';
 let secondOperand = '';
 let currentOperand = null;
 let shouldResetScreen = false;
+// Initialize the calculator display
+if (screenCurrentOperation) {
+    screenCurrentOperation.textContent = '0';
+}
 window.addEventListener('keydown', keyboardInput);
-btnEqual?.addEventListener('click', evaluate);
+btnEqual?.addEventListener('click', () => {
+    console.log('Equals button clicked');
+    evaluate();
+});
 btnClear?.addEventListener('click', clear);
 btnDelete?.addEventListener('click', deleteNum);
 btnPoint?.addEventListener('click', addPoint);
-btnNums.forEach((button) => button.addEventListener('click', () => appendNumber(button.textContent)));
-btnOprt.forEach((button) => button.addEventListener('click', () => setOperation(button.textContent)));
+btnNums.forEach((button) => button.addEventListener('click', () => {
+    console.log('Number button clicked:', button.textContent);
+    appendNumber(button.textContent);
+}));
+btnOprt.forEach((button) => button.addEventListener('click', () => {
+    console.log('Operator button clicked:', button.textContent);
+    setOperation(button.textContent);
+}));
 function appendNumber(number) {
+    console.log('appendNumber called with:', number);
+    console.log('Current screen content:', screenCurrentOperation?.textContent);
+    console.log('shouldResetScreen:', shouldResetScreen);
     if (!screenCurrentOperation)
         return;
     if (screenCurrentOperation.textContent === '0' || shouldResetScreen) {
+        console.log('Resetting screen');
         resetScreen();
     }
     screenCurrentOperation.textContent += number;
+    console.log('New screen content:', screenCurrentOperation.textContent);
 }
 function resetScreen() {
     if (screenCurrentOperation)
@@ -32,6 +50,7 @@ function resetScreen() {
     shouldResetScreen = false;
 }
 function clear() {
+    console.log('clear called');
     if (screenCurrentOperation)
         screenCurrentOperation.textContent = '0';
     if (screenLastOperation)
@@ -39,6 +58,8 @@ function clear() {
     firstOperand = '';
     secondOperand = '';
     currentOperand = null;
+    shouldResetScreen = false;
+    console.log('After clear - all variables reset');
 }
 function addPoint() {
     if (!screenCurrentOperation) {
@@ -56,33 +77,64 @@ function addPoint() {
     screenCurrentOperation.textContent += '.';
 }
 function setOperation(oprt) {
+    console.log('setOperation called with:', oprt);
+    console.log('Current firstOperand:', firstOperand);
+    console.log('Current screen content:', screenCurrentOperation?.textContent);
+    // If there's already an operation and a first operand, evaluate it first
+    if (currentOperand && firstOperand && screenCurrentOperation && !shouldResetScreen) {
+        console.log('Evaluating previous operation before setting new one');
+        evaluate();
+    }
     // Only set up the operation, do not evaluate
-    if (screenCurrentOperation)
+    if (screenCurrentOperation) {
         firstOperand = screenCurrentOperation.textContent;
+        console.log('Set firstOperand to:', firstOperand);
+    }
     currentOperand = oprt;
     if (screenLastOperation)
         screenLastOperation.textContent = `${firstOperand} ${currentOperand}`;
     shouldResetScreen = true;
+    console.log('After setOperation - firstOperand:', firstOperand);
+    console.log('After setOperation - currentOperand:', currentOperand);
+    console.log('After setOperation - shouldResetScreen:', shouldResetScreen);
 }
 function deleteNum() {
-    if (screenCurrentOperation)
-        screenCurrentOperation.textContent = screenCurrentOperation.textContent
-            .toString()
-            .slice(0, -1);
+    if (screenCurrentOperation) {
+        const currentText = screenCurrentOperation.textContent || '';
+        screenCurrentOperation.textContent = currentText.slice(0, -1);
+        // If we delete everything, set to '0'
+        if (screenCurrentOperation.textContent === '') {
+            screenCurrentOperation.textContent = '0';
+        }
+    }
 }
 function evaluate() {
-    if (screenCurrentOperation === null || shouldResetScreen)
+    console.log('evaluate called');
+    console.log('screenCurrentOperation:', screenCurrentOperation);
+    console.log('shouldResetScreen:', shouldResetScreen);
+    console.log('currentOperand:', currentOperand);
+    console.log('firstOperand:', firstOperand);
+    console.log('Current screen content:', screenCurrentOperation?.textContent);
+    if (screenCurrentOperation === null || shouldResetScreen || !currentOperand || !firstOperand) {
+        console.log('Early return from evaluate - missing required values');
         return;
+    }
     if ((currentOperand === '/' || currentOperand === '÷') && screenCurrentOperation.textContent === '0') {
         alert("You cannot divide by 0");
         return;
     }
     secondOperand = screenCurrentOperation.textContent;
-    screenCurrentOperation.textContent = `${roundResult(operate(currentOperand, firstOperand, secondOperand))}`;
+    console.log('secondOperand:', secondOperand);
+    const result = operate(currentOperand, firstOperand, secondOperand);
+    console.log('Operation result:', result);
+    screenCurrentOperation.textContent = `${roundResult(result)}`;
     if (screenLastOperation)
         screenLastOperation.textContent = `${firstOperand} ${currentOperand} ${secondOperand} =`;
     firstOperand = screenCurrentOperation.textContent;
     currentOperand = null;
+    shouldResetScreen = true; // Reset screen for next operation
+    console.log('After evaluate - firstOperand:', firstOperand);
+    console.log('After evaluate - currentOperand:', currentOperand);
 }
 function roundResult(number) {
     return Math.round(number * 1000) / 1000;
@@ -99,10 +151,22 @@ function convertOperator(keyboardOperator) {
     return keyboardOperator;
 }
 // basic arithmetic operations
-function add(a, b) { return a + b; }
-function subt(a, b) { return a - b; }
-function mult(a, b) { return a * b; }
-function divs(a, b) { return a / b; }
+function add(a, b) {
+    console.log('add function:', a, '+', b, '=', a + b);
+    return a + b;
+}
+function subt(a, b) {
+    console.log('subt function:', a, '-', b, '=', a - b);
+    return a - b;
+}
+function mult(a, b) {
+    console.log('mult function:', a, '*', b, '=', a * b);
+    return a * b;
+}
+function divs(a, b) {
+    console.log('divs function:', a, '/', b, '=', a / b);
+    return a / b;
+}
 function keyboardInput(e) {
     if (e.key >= 0 && e.key <= 9)
         return appendNumber(e.key);
@@ -120,14 +184,36 @@ function keyboardInput(e) {
 }
 // Logic to operate
 function operate(operator, a, b) {
+    console.log('operate function called with:');
+    console.log('operator:', operator, 'type:', typeof operator);
+    console.log('a:', a, 'type:', typeof a);
+    console.log('b:', b, 'type:', typeof b);
     a = Number(a);
     b = Number(b);
+    console.log('After Number conversion:');
+    console.log('a:', a, 'type:', typeof a);
+    console.log('b:', b, 'type:', typeof b);
+    let result;
     switch (operator) {
-        case '+': return add(a, b);
-        case '−': return subt(a, b);
-        case '×': return mult(a, b);
-        case '÷': return divs(a, b);
-        default: return 0;
+        case '+':
+            result = add(a, b);
+            console.log('Addition result:', result);
+            return result;
+        case '−':
+            result = subt(a, b);
+            console.log('Subtraction result:', result);
+            return result;
+        case '×':
+            result = mult(a, b);
+            console.log('Multiplication result:', result);
+            return result;
+        case '÷':
+            result = divs(a, b);
+            console.log('Division result:', result);
+            return result;
+        default:
+            console.log('Default case - operator not recognized:', operator);
+            return 0;
     }
 }
 //# sourceMappingURL=script.js.map
